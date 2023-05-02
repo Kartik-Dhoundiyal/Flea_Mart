@@ -44,21 +44,15 @@ pipeline {
 
         stage('Monitor') {
             steps {
-                // Install Prometheus exporters and Python dependencies.
-                sh 'pip install prometheus_client'
-                sh 'pip install requests'
-
                 // Start the Prometheus server
                 sh 'docker run -d --name prometheus -p 9090:9090 prom/prometheus'
-
-                // Start the Grafana server
-                sh 'docker run -d --name grafana -p 3000:3000 grafana/grafana'
-
+                
+                // Edit the prometheus.yml file
+                sh 'docker exec prometheus sed -i \'s/^.*scrape_configs:/  - job_name: django\\n    scrape_interval: 10s\\n    static_configs:\\n    - targets: [\"localhost:8000\"]\\n&/\' /etc/prometheus/prometheus.yml'
+                
                 // Restart Prometheus to pick up the new configuration
                 sh 'docker restart prometheus'
 
-                // Configure Grafana to use Prometheus as a data source
-                sh 'curl -X POST -H "Content-Type: application/json" -d \'{"name":"prometheus","type":"prometheus","url":"http://prometheus:9090","access":"proxy","isDefault":true}\' http://admin:admin@localhost:3000/api/datasources'
             }
         }
     }
