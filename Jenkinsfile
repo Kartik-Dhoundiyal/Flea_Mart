@@ -38,17 +38,17 @@ pipeline {
         
         stage('Deploy') {
             steps {
-                sh 'docker run -d --name $DOCKER_IMAGE_NAME -p 8000:8000 $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_IMAGE_NAME -e PROMETHEUS_MULTIPROC_DIR=/prometheus -v /prometheus:/prometheus my-django-app'
+                sh 'docker run -d --name $DOCKER_IMAGE_NAME -p 8000:8000 $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_IMAGE_NAME'
             }
         }
 
         stage('Monitor') {
             steps {
                 // Start the Prometheus server
-                sh 'docker run -d --name prometheus -p 9090:9090 prom/prometheus'
+                //sh 'docker run -d --name prometheus -p 9090:9091 prom/prometheus'
                 
                 // Edit the prometheus.yml file
-                sh 'docker exec prometheus sed -i \'s/^.*scrape_configs:/  - job_name: django\\n    scrape_interval: 10s\\n    static_configs:\\n    - targets: [\"localhost:8000\"]\\n&/\' /etc/prometheus/prometheus.yml'
+                //sh 'docker exec prometheus sed -i \'s/^.*scrape_configs:/  - job_name: django\\n    scrape_interval: 10s\\n    static_configs:\\n    - targets: [\"localhost:8000\metrics"]\\n&/\' /etc/prometheus/prometheus.yml'
                 
                 // Restart Prometheus to pick up the new configuration
                 sh 'docker restart prometheus'
