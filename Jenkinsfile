@@ -38,7 +38,7 @@ pipeline {
         
         stage('Deploy') {
             steps {
-                sh 'docker run -d --name $DOCKER_IMAGE_NAME -p 8000:8000 $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_IMAGE_NAME'
+                sh 'docker run -d --name cont_2 -p 8000:8000 $DOCKER_REGISTRY/$DOCKER_USER/$DOCKER_IMAGE_NAME'
             }
         }
     }
