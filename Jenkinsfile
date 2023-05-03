@@ -51,7 +51,7 @@ pipeline {
                 // sh 'docker exec prometheus sed -i \'s/^.*scrape_configs:/  - job_name: django\\n    scrape_interval: 10s\\n    static_configs:\\n    - targets: [\"localhost:8000\metrics"]\\n&/\' /etc/prometheus/prometheus.yml'
                 
                 // Restart Prometheus to pick up the new configuration
-                sh 'apt install prometheus'
+                sh 'sudo apt-get update'
 
 
             }
