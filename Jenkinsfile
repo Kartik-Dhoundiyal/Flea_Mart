@@ -44,14 +44,14 @@ pipeline {
 
         stage('Monitor') {
             steps {
-                // Start the Prometheus server
-                //sh 'docker run -d --name prometheus -p 9090:9091 prom/prometheus'
+                Start the Prometheus server
+                sh 'docker run -d --name prometheus -p 9091:9091 prom/prometheus'
                 
-                // Edit the prometheus.yml file
-                //sh 'docker exec prometheus sed -i \'s/^.*scrape_configs:/  - job_name: django\\n    scrape_interval: 10s\\n    static_configs:\\n    - targets: [\"localhost:8000\metrics"]\\n&/\' /etc/prometheus/prometheus.yml'
+                Edit the prometheus.yml file
+                sh 'docker exec prometheus sed -i \'s/^.*scrape_configs:/  - job_name: django\\n    scrape_interval: 10s\\n    static_configs:\\n    - targets: [\"localhost:8000\metrics"]\\n&/\' /etc/prometheus/prometheus.yml'
                 
-                // Restart Prometheus to pick up the new configuration
-                // sh 'docker restart prometheus'
+                Restart Prometheus to pick up the new configuration
+                sh 'docker restart prometheus'
 
 
             }
